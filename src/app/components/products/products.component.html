@@ -1,0 +1,57 @@
+<div class="container p-2">
+  <div class="mb-3">
+    <label for="" class="form-label">Category</label>
+    <select class="form-select form-select-lg" [(ngModel)]="catFilterId">
+      <option selected value="0">All</option>
+      <option *ngFor="let c of catList" selected [value]="c.name">
+        {{ c.name }}
+      </option>
+    </select>
+  </div>
+</div>
+<div class="row row-cols-2 row-cols-md-5 g-4">
+  @for (item of prdList; track item.id) {
+  <ng-container *ngIf="item.category == catFilterId || catFilterId == 0">
+    <div class="col">
+      <span class="badge rounded-pill text-bg-primary">{{
+        item.category
+      }}</span>
+      <div
+        class="card"
+        [ngClass]="{ 'bg-warning': item['quantity'] == 1 }"
+        [ngStyle]="{ opacity: item['quantity'] == 0 ? '20%' : '100%' }"
+        MyBorder="wheat"
+      >
+        <img [src]="item.image" class="card-img-top" />
+        <div class="card-body">
+          <h5 class="card-title">{{ item.title }}</h5>
+          <p class="card-text">price: only {{ item.price }} L.E.</p>
+          <p class="card-text">
+            <small class="text-body-secondary"
+              >Items Left: {{ item["quantity"] }}</small
+            >
+          </p>
+        </div>
+        <div class="card-footer text-center">
+          <button class="btn btn-secondary" (click)="buy(item.id)">Buy</button>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+  }
+</div>
+<div class="container">
+  <div class="mb-3">
+    <label for="" class="form-label">Credit Card</label>
+    <input
+      MyCCard
+      type="text"
+      class="form-control"
+      name=""
+      id=""
+      aria-describedby="helpId"
+      placeholder=""
+    />
+    <small id="helpId" class="form-text text-muted">16 numbers only</small>
+  </div>
+</div>
