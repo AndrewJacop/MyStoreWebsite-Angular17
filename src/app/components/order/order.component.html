@@ -1,0 +1,129 @@
+<!-- Select Category Section -->
+<div class="container p-2">
+  <div class="mb-3">
+    <label for="" class="form-label">Category</label>
+    <select class="form-select form-select-lg" [(ngModel)]="catFilterId">
+      <option selected value="0">All</option>
+      <option *ngFor="let c of filterList" selected [value]="c.name">
+        {{ c.name }}
+      </option>
+    </select>
+  </div>
+</div>
+<!-- Products Section -->
+<app-products
+  [selectedCatId]="catFilterId"
+  (onUpdateCart)="updateCart($event)"
+></app-products>
+<!-- Credit Card -->
+<h1 class="text-center">Your Info</h1>
+<!-- <div class="container">
+  <div class="mb-3">
+    <label for="" class="form-label">Credit Card</label>
+    <input
+      MyCCard
+      type="text"
+      class="form-control"
+      name=""
+      id=""
+      aria-describedby="helpId"
+      placeholder=""/>
+    <small id="helpId" class="form-text text-muted">16 numbers only</small>
+  </div>
+</div> -->
+<div class="container">
+  <div class="mb-3">
+    <label for="cc" class="form-label">Credit Card</label>
+    <input
+      [(ngModel)]="creditCardNumber"
+      name="cc"
+      type="text"
+      class="form-control"
+    />
+    <h4>your Credit Card Number is {{ creditCardNumber | ccPipe }}</h4>
+  </div>
+</div>
+<!-- National ID -->
+<div class="container">
+  <div class="mb-3">
+    <label for="nid" class="form-label">National Id Number</label>
+    <input
+      [(ngModel)]="NationalIdNumber"
+      name="nid"
+      type="text"
+      class="form-control"
+    />
+    <h4>Full Date is {{ NationalIdNumber | nidDate }}</h4>
+    <h4>Year is {{ NationalIdNumber | nidDate : "YY" }}</h4>
+    <h4>Month is {{ NationalIdNumber | nidDate : "MM" }}</h4>
+    <h4>Day is {{ NationalIdNumber | nidDate : "DD" }}</h4>
+  </div>
+</div>
+<!-- Cart Section -->
+<div class="container">
+  <h1 class="text-center">Your Cart</h1>
+</div>
+<div class="container">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Item</th>
+        <th scope="col">Quantity</th>
+        <th scope="col">Price</th>
+        <th scope="col">Total</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (cItem of cartList; track $index) {
+      <tr>
+        <th scope="row">{{ cItem.product.id }}</th>
+        <td>{{ cItem.product.title }}</td>
+        <td>{{ cItem.quantity }}</td>
+        <td>{{ cItem.product.price | currency }}</td>
+        <td>{{ cItem.product.price * cItem.quantity | currency }}</td>
+        <td>
+          <button
+            type="button"
+            class="btn btn-outline-danger"
+            data-mdb-ripple-init
+            data-mdb-ripple-color="dark"
+            (click)="deleteOneItem($index)"
+          >
+            <i class="bi bi-trash3"></i> X 1
+          </button>
+          <button
+            type="button"
+            class="btn btn-outline-danger"
+            data-mdb-ripple-init
+            data-mdb-ripple-color="dark"
+            (click)="deleteAllItem($index)"
+          >
+            <i class="bi bi-trash3"></i> X ALL
+          </button>
+        </td>
+      </tr>
+      } @empty {
+      <tr>
+        There are no items.
+      </tr>
+      }
+    </tbody>
+  </table>
+</div>
+<!-- Checkout Button -->
+<div class="container d-flex justify-content-between">
+  <span style="font-size: 20px"
+    >Your total order is {{ total | currency }}</span
+  >
+  <button
+    type="button"
+    class="btn btn-primary"
+    data-mdb-ripple-init
+    data-mdb-ripple-color="dark"
+    (click)="checkOut()"
+  >
+    Checkout
+  </button>
+</div>

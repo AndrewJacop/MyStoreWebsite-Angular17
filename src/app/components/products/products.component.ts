@@ -1,43 +1,62 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ICategory } from '../../models/ICategory';
 import { IProduct } from '../../models/IProduct';
 import { CommonModule } from '@angular/common';
 import { GetProductsService } from '../../services/getProducts.service';
 import { MyBorderDirective } from '../../directives/my-border.directive';
 import { MyCCardDirective } from '../../directives/my-c-card.directive';
+import { MatCardModule } from '@angular/material/card';
+import { ICartItem } from '../../models/ICartItem';
 
 @Component({
   selector: 'app-products',
   standalone: true,
-  imports: [FormsModule, CommonModule, MyBorderDirective, MyCCardDirective],
+  imports: [
+    FormsModule,
+    CommonModule,
+    MyBorderDirective,
+    MyCCardDirective,
+    MatCardModule,
+  ],
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.css'],
 })
 export class ProductsComponent implements OnInit {
   title = 'Product List';
   prdList: IProduct[] = [];
-  catFilterId: number = 0;
-  catList: ICategory[];
-  constructor(private productsService: GetProductsService) {
-    this.catList = [
-      { id: 1, name: 'electronics' },
-      { id: 2, name: 'jewelery' },
-      { id: 3, name: "men's clothing" },
-      { id: 4, name: "women's clothing" },
-    ];
-  }
+  fPrdList: IProduct[] = [];
+  cartList: ICartItem[] = [];
+  total: number = 0;
+  @Input() selectedCatId: number = 0;
+  @Output() onUpdateCart: EventEmitter<{ c: ICartItem[]; t: number }> =
+    new EventEmitter();
+
+  constructor(private productsService: GetProductsService) {}
 
   buy(id: number) {
+    // Reduce Quantity
     if (Number(this.prdList[id - 1]['quantity']) > 0) {
       this.prdList[id - 1]['quantity'] =
         Number(this.prdList[id - 1]['quantity']) - 1;
+      // Add to cart list
+      let idx = this.cartList.findIndex(
+        (e) => e.product == this.prdList[id - 1]
+      );
+      if (idx == -1) {
+        this.cartList.push({
+          product: this.prdList[id - 1],
+          quantity: 1,
+        });
+      } else {
+        this.cartList[idx].quantity = Number(this.cartList[idx].quantity) + 1;
+      }
+      this.updateCart();
     }
   }
 
-  randomNum() {
-    return Math.random();
-  }
+  // randomNum() {
+  //   return Math.random();
+  // }
 
   ngOnInit(): void {
     this.getProducts();
@@ -48,8 +67,36 @@ export class ProductsComponent implements OnInit {
       this.prdList = data;
       this.prdList.forEach((product) => {
         product['quantity'] = Math.floor(Math.random() * 10);
+        product['available'] = product['quantity'];
       });
-      // console.log(this.prdList);
+      this.fPrdList = this.prdList;
     });
+  }
+
+  updateCart() {
+    // Updating total
+    this.total = this.cartList.reduce(
+      (acc, item) => acc + item.product.price * item.quantity,
+      0
+    );
+    // update cart
+    this.onUpdateCart.emit({ c: this.cartList, t: this.total });
+  }
+
+  updateProductQuantity() {
+    this.prdList.forEach((product) => {
+      product['available'] = product['quantity'];
+    });
+  }
+
+  ngOnChanges() {
+    // update view
+    if (this.selectedCatId == 0) {
+      this.fPrdList = this.prdList;
+    } else {
+      this.fPrdList = this.prdList.filter(
+        (product) => product.category == this.selectedCatId
+      );
+    }
   }
 }
