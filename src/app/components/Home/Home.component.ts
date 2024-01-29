@@ -4,6 +4,8 @@ import { NavbarComponent } from '../navbar/navbar.component';
 import { ProductsComponent } from '../products/products.component';
 import { OrderComponent } from '../order/order.component';
 import { RouterOutlet } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { AdsObsService } from '../../services/AdsObs.service';
 
 @Component({
   selector: 'app-Home',
@@ -19,7 +21,17 @@ import { RouterOutlet } from '@angular/router';
   styleUrls: ['./Home.component.css'],
 })
 export class HomeComponent implements OnInit {
-  constructor() {}
+  currentAd: string = '';
+  constructor(private adsObs: AdsObsService, private _snackBar: MatSnackBar) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    let mySub = this.adsObs.myAdsSubscribtion().subscribe((data) => {
+      // console.log(data);
+      this.currentAd = data;
+      let snackBarRef = this._snackBar.open(this.currentAd, 'X');
+      snackBarRef.onAction().subscribe(() => {
+        mySub.unsubscribe();
+      });
+    });
+  }
 }

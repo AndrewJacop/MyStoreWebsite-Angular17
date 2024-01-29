@@ -34,8 +34,7 @@ export class ProductsComponent implements OnInit {
 
   constructor(
     private productsService: GetProductsService,
-    private router: Router,
-    private loc: Location
+    private router: Router
   ) {}
 
   buy(id: number) {
