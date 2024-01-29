@@ -4,10 +4,11 @@ import { MyCCardDirective } from '../../directives/my-c-card.directive';
 import { MyBorderDirective } from '../../directives/my-border.directive';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ICategory } from '../../models/ICategory';
 import { ICartItem } from '../../models/ICartItem';
 import { CcPipePipe } from '../../pipes/cc-pipe.pipe';
 import { NidDatePipePipe } from '../../pipes/nid-date-pipe.pipe';
+import { ICategory } from '../../models/ICategory';
+import { GetProductsService } from '../../services/getProducts.service';
 
 @Component({
   selector: 'app-order',
@@ -25,21 +26,16 @@ import { NidDatePipePipe } from '../../pipes/nid-date-pipe.pipe';
   styleUrls: ['./order.component.css'],
 })
 export class OrderComponent {
-  filterList: ICategory[];
   cartList: ICartItem[] = [];
+  catList: ICategory[] = [];
   catFilterId: number = 0;
   creditCardNumber: string = '';
   NationalIdNumber: string = '';
   @ViewChild(ProductsComponent) prdCm!: ProductsComponent;
   total: number = 0;
 
-  constructor() {
-    this.filterList = [
-      { id: 1, name: 'electronics' },
-      { id: 2, name: 'jewelery' },
-      { id: 3, name: "men's clothing" },
-      { id: 4, name: "women's clothing" },
-    ];
+  constructor(private productsService: GetProductsService) {
+    this.catList = productsService.catList;
   }
 
   updateCart(cObj: { c: ICartItem[]; t: number }) {

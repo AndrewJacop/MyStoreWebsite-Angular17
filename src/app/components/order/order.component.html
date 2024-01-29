@@ -4,7 +4,7 @@
     <label for="" class="form-label">Category</label>
     <select class="form-select form-select-lg" [(ngModel)]="catFilterId">
       <option selected value="0">All</option>
-      <option *ngFor="let c of filterList" selected [value]="c.name">
+      <option *ngFor="let c of catList" selected [value]="c.id">
         {{ c.name }}
       </option>
     </select>

@@ -1,12 +1,13 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IProduct } from '../../models/IProduct';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { GetProductsService } from '../../services/getProducts.service';
 import { MyBorderDirective } from '../../directives/my-border.directive';
 import { MyCCardDirective } from '../../directives/my-c-card.directive';
 import { MatCardModule } from '@angular/material/card';
 import { ICartItem } from '../../models/ICartItem';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-products',
@@ -31,7 +32,11 @@ export class ProductsComponent implements OnInit {
   @Output() onUpdateCart: EventEmitter<{ c: ICartItem[]; t: number }> =
     new EventEmitter();
 
-  constructor(private productsService: GetProductsService) {}
+  constructor(
+    private productsService: GetProductsService,
+    private router: Router,
+    private loc: Location
+  ) {}
 
   buy(id: number) {
     // Reduce Quantity
@@ -59,10 +64,10 @@ export class ProductsComponent implements OnInit {
   // }
 
   ngOnInit(): void {
-    this.getProducts();
+    this.updateLists();
   }
 
-  getProducts(): void {
+  updateLists(): void {
     this.productsService.getProducts().subscribe((data) => {
       this.prdList = data;
       this.prdList.forEach((product) => {
@@ -70,6 +75,8 @@ export class ProductsComponent implements OnInit {
         product['available'] = product['quantity'];
       });
       this.fPrdList = this.prdList;
+      // console.log(this.fPrdList);
+      this.productsService.fullProductList = this.prdList;
     });
   }
 
@@ -94,9 +101,14 @@ export class ProductsComponent implements OnInit {
     if (this.selectedCatId == 0) {
       this.fPrdList = this.prdList;
     } else {
-      this.fPrdList = this.prdList.filter(
-        (product) => product.category == this.selectedCatId
+      this.fPrdList = this.productsService.getProductsByCatId(
+        this.selectedCatId
       );
+      // console.log(this.prdList);
     }
+  }
+
+  navToDetails(id: number) {
+    this.router.navigate(['/home/product', id]);
   }
 }
