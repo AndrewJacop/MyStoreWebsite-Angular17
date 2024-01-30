@@ -16,14 +16,21 @@ export class ProductDetailsComponent implements OnInit {
   currentId: number = 0;
   currentProduct: IProduct | null = null;
   constructor(
-    private actRouter: ActivatedRoute,
+    private activatedRoute: ActivatedRoute,
     private productService: GetProductsService,
     private router: Router,
     private location: Location
   ) {}
 
   ngOnInit() {
-    this.actRouter.params.subscribe((params) => {
+    this.activatedRoute.params.subscribe((params) => {
+      this.currentId = Number(params['id']);
+      // console.log(this.currentId);
+      this.currentProduct = this.productService.getProductsById(this.currentId);
+    });
+  }
+  ngOnChanges() {
+    this.activatedRoute.params.subscribe((params) => {
       this.currentId = Number(params['id']);
       // console.log(this.currentId);
     });
@@ -32,5 +39,13 @@ export class ProductDetailsComponent implements OnInit {
 
   goBack() {
     this.location.back();
+  }
+
+  navToNextItem(direction: string) {
+    const newid = this.productService.getFollowingProductId(
+      this.currentId,
+      direction
+    );
+    this.router.navigateByUrl(`/home/product/${newid}`);
   }
 }

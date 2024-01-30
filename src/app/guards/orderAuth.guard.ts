@@ -5,7 +5,7 @@ import { UserAuthService } from '../services/UserAuth.service';
 export const orderAuthGuard: CanActivateFn = (route, state) => {
   let userAuthService = inject(UserAuthService);
   let router = inject(Router);
-  if (userAuthService.isLoggedIn) {
+  if (userAuthService.sLoginCheck()) {
     return true;
   } else {
     userAuthService.redirectUrl = state.url;

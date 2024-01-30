@@ -7,9 +7,12 @@
       [ngClass]="{ 'bg-warning': item['quantity'] == 1 }"
       [ngStyle]="{ opacity: item['quantity'] == 0 ? '20%' : '100%' }"
       MyBorder="wheat"
-      (click)="navToDetails(item.id)"
     >
-      <img [src]="item.image" class="card-img-top" />
+      <img
+        [src]="item.image"
+        class="card-img-top"
+        (click)="navToDetails(item.id)"
+      />
       <div class="card-body">
         <h5 class="card-title">{{ item.title }}</h5>
         <p class="card-text">price: only {{ item.price }} L.E.</p>

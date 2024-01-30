@@ -30,12 +30,11 @@ export class GetProductsService {
   }
 
   getProductsById(id: number): IProduct | null {
-    let idx = this.fullProductList.findIndex((ele) => {
-      return ele.id == id;
-    });
+    let idx = this.fullProductList.findIndex((ele) => ele.id == id);
     if (idx == -1) {
       return null;
     } else {
+      // console.log(this.fullProductList[idx]);
       return this.fullProductList[idx];
     }
   }
@@ -44,5 +43,31 @@ export class GetProductsService {
     return this.fullProductList.filter(
       (prd) => prd.category == this.catList[catId - 1].name
     );
+  }
+
+  getFollowingProductId(currentid: number, direction: string): number {
+    let idx = this.fullProductList.findIndex((ele) => {
+      return ele.id == currentid;
+    });
+    if (idx == -1) {
+      return currentid;
+    } else {
+      if (direction == '>') {
+        if (idx == this.fullProductList.length - 1) {
+          return this.fullProductList[0].id;
+        } else {
+          return this.fullProductList[idx + 1].id;
+        }
+      } else if (direction == '<') {
+        if (idx == 0) {
+          return this.fullProductList[this.fullProductList.length - 1].id;
+        } else {
+          return this.fullProductList[idx - 1].id;
+        }
+      } else {
+        alert('Error!!!');
+        return -1;
+      }
+    }
   }
 }

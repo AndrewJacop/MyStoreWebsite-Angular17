@@ -29,7 +29,7 @@ export class UserAuthService {
     localStorage.removeItem('token');
     this.isLoggedIn = false;
     this.loggingState.next(false);
-    this.router.navigate(['/home/login']);
+    this.router.navigate(['/home/welcome']);
   }
 
   sLoginCheck(): boolean {

@@ -7,13 +7,15 @@ import { ContactUsComponent } from './components/ContactUs/ContactUs.component';
 import { ProductDetailsComponent } from './components/ProductDetails/ProductDetails.component';
 import { LoginComponent } from './components/login/login.component';
 import { orderAuthGuard } from './guards/orderAuth.guard';
+import { WelcomeComponent } from './components/welcome/welcome.component';
 
 export const routes: Routes = [
-  { path: '', redirectTo: '/home', pathMatch: 'full' },
+  { path: '', redirectTo: '/home/welcome', pathMatch: 'full' },
   {
     path: 'home',
     component: HomeComponent,
     children: [
+      { path: 'welcome', component: WelcomeComponent },
       {
         path: 'products',
         component: OrderComponent,

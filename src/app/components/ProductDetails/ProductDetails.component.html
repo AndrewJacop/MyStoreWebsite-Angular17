@@ -1,6 +1,9 @@
 <div class="row align-items-center">
   <div class="col-2 d-flex">
-    <i class="bi bi-arrow-left-square-fill m-auto"></i>
+    <i
+      class="bi bi-arrow-left-square-fill m-auto"
+      (click)="navToNextItem('<')"
+    ></i>
   </div>
   <div class="card col-8">
     <div class="card-header">{{ currentProduct?.title }}</div>
@@ -19,6 +22,9 @@
     </div>
   </div>
   <div class="col-2 d-flex">
-    <i class="bi bi-arrow-right-square-fill m-auto"></i>
+    <i
+      class="bi bi-arrow-right-square-fill m-auto"
+      (click)="navToNextItem('>')"
+    ></i>
   </div>
 </div>
