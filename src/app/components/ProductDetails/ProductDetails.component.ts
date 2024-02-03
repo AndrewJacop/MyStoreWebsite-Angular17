@@ -4,6 +4,7 @@ import { GetProductsService } from '../../services/getProducts.service';
 import { IProduct } from '../../models/IProduct';
 import { CommonModule } from '@angular/common';
 import { Location } from '@angular/common';
+import { ICategory } from '../../models/ICategory';
 
 @Component({
   selector: 'app-ProductDetails',
@@ -14,7 +15,8 @@ import { Location } from '@angular/common';
 })
 export class ProductDetailsComponent implements OnInit {
   currentId: number = 0;
-  currentProduct: IProduct | null = null;
+  currentProduct: IProduct = {} as IProduct;
+  catList: ICategory[] = [] as ICategory[];
   constructor(
     private activatedRoute: ActivatedRoute,
     private productService: GetProductsService,
@@ -26,7 +28,12 @@ export class ProductDetailsComponent implements OnInit {
     this.activatedRoute.params.subscribe((params) => {
       this.currentId = Number(params['id']);
       // console.log(this.currentId);
-      this.currentProduct = this.productService.getProductsById(this.currentId);
+      this.productService.getProductsById(this.currentId).subscribe((data) => {
+        this.currentProduct = data;
+      });
+    });
+    this.productService.getAllCategories().subscribe((data) => {
+      this.catList = data;
     });
   }
   ngOnChanges() {
@@ -34,7 +41,9 @@ export class ProductDetailsComponent implements OnInit {
       this.currentId = Number(params['id']);
       // console.log(this.currentId);
     });
-    this.currentProduct = this.productService.getProductsById(this.currentId);
+    this.productService.getProductsById(this.currentId).subscribe((data) => {
+      this.currentProduct = data;
+    });
   }
 
   goBack() {
@@ -47,5 +56,17 @@ export class ProductDetailsComponent implements OnInit {
       direction
     );
     this.router.navigateByUrl(`/home/product/${newid}`);
+  }
+
+  editProduct(id: number) {
+    this.router.navigateByUrl(`/home/edit/${id}`);
+  }
+
+  deleteProduct(id: number) {
+    confirm('Are you sure?');
+    this.productService.deletProductById(id).subscribe((data) => {
+      // console.log(data);
+      this.router.navigateByUrl(`/home/products`);
+    });
   }
 }

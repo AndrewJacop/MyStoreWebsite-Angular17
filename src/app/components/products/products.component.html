@@ -1,7 +1,9 @@
 <div class="row row-cols-2 row-cols-md-5 g-4">
   @for (item of fPrdList; track item.id) {
   <div class="col">
-    <span class="badge rounded-pill text-bg-primary">{{ item.category }}</span>
+    <span class="badge rounded-pill text-bg-primary">{{
+      catList[item.catId - 1].name
+    }}</span>
     <div
       class="card"
       [ngClass]="{ 'bg-warning': item['quantity'] == 1 }"

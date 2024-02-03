@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { IProduct } from '../models/IProduct';
 import { ICategory } from '../models/ICategory';
+import { environment } from '../../environments/environment.development';
 
 @Injectable({
   // root: accesable every where, any: lazy loading
@@ -12,42 +13,31 @@ import { ICategory } from '../models/ICategory';
   providedIn: 'root',
 })
 export class GetProductsService {
-  private FAKE_API_URL = 'https://fakestoreapi.com';
-  fullProductList: IProduct[] = [];
-  catList: ICategory[];
+  private FAKE_API_URL: string = `${environment.baseUrl}`;
+  fullProductList: IProduct[] = [] as IProduct[];
 
-  constructor(private http: HttpClient) {
-    this.catList = [
-      { id: 1, name: 'electronics' },
-      { id: 2, name: 'jewelery' },
-      { id: 3, name: "men's clothing" },
-      { id: 4, name: "women's clothing" },
-    ];
+  constructor(private httpClient: HttpClient) {
+    this.getProducts().subscribe((data) => {
+      this.fullProductList = data;
+    });
   }
 
   getProducts(): Observable<IProduct[]> {
-    return this.http.get<IProduct[]>(`${this.FAKE_API_URL}/products`);
+    return this.httpClient.get<IProduct[]>(`${this.FAKE_API_URL}/products`);
   }
 
-  getProductsById(id: number): IProduct | null {
-    let idx = this.fullProductList.findIndex((ele) => ele.id == id);
-    if (idx == -1) {
-      return null;
-    } else {
-      // console.log(this.fullProductList[idx]);
-      return this.fullProductList[idx];
-    }
+  getProductsById(id: number): Observable<IProduct> {
+    return this.httpClient.get<IProduct>(`${this.FAKE_API_URL}/products/${id}`);
   }
-
-  getProductsByCatId(catId: number): IProduct[] {
-    return this.fullProductList.filter(
-      (prd) => prd.category == this.catList[catId - 1].name
-    );
+  getProductsByCatId(catId: number): Observable<IProduct[]> {
+    return this.httpClient.get<IProduct[]>(`${this.FAKE_API_URL}/products?`, {
+      params: { catId: catId },
+    });
   }
 
   getFollowingProductId(currentid: number, direction: string): number {
     let idx = this.fullProductList.findIndex((ele) => {
-      return ele.id == currentid;
+      return Number(ele.id) == Number(currentid);
     });
     if (idx == -1) {
       return currentid;
@@ -69,5 +59,38 @@ export class GetProductsService {
         return -1;
       }
     }
+  }
+
+  getNextId() {
+    return this.fullProductList[this.fullProductList.length - 1].id + 1;
+  }
+
+  getAllCategories(): Observable<ICategory[]> {
+    return this.httpClient.get<ICategory[]>(`${this.FAKE_API_URL}/categories`);
+  }
+
+  addNewProduct(newPrd: IProduct): Observable<IProduct> {
+    return this.httpClient.post<IProduct>(
+      `${this.FAKE_API_URL}/products`,
+      newPrd
+    );
+  }
+  editProductById(id: number, newPrd: IProduct): Observable<IProduct> {
+    return this.httpClient.patch<IProduct>(
+      `${this.FAKE_API_URL}/products/${id}`,
+      newPrd
+    );
+  }
+
+  deletProductById(id: number): Observable<IProduct> {
+    return this.httpClient.delete<IProduct>(
+      `${this.FAKE_API_URL}/products/${id}`
+    );
+  }
+
+  getProductsPage(page: number): Observable<IProduct[]> {
+    return this.httpClient.get<IProduct[]>(
+      `${this.FAKE_API_URL}/posts?_page=${page}&_per_page=10`
+    );
   }
 }

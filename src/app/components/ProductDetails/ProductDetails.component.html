@@ -6,19 +6,25 @@
     ></i>
   </div>
   <div class="card col-8">
-    <div class="card-header">{{ currentProduct?.title }}</div>
+    <div class="card-header">{{ currentProduct.title }}</div>
     <div class="card-body m-auto text-center">
       <h5 class="card-title">
-        <span class="badge bg-secondary">{{ currentProduct?.category }}</span>
+        <span class="badge bg-secondary">{{
+          catList[currentProduct.catId - 1].name
+        }}</span>
       </h5>
-      <img [src]="currentProduct?.image" />
+      <img [src]="currentProduct.image" />
       <p class="card-text">
-        With supporting text below as a natural lead-in to additional content.
+        {{ currentProduct.description }}
       </p>
       <p class="card-footer">
-        {{ currentProduct?.price | currency }}
+        {{ currentProduct.price | currency }}
       </p>
-      <a (click)="goBack()" class="btn btn-primary">Go back</a>
+      <a (click)="goBack()" class="btn btn-primary m-2">Go back</a>
+      <a (click)="editProduct(currentId)" class="btn btn-success m-2">Edit</a>
+      <a (click)="deleteProduct(currentId)" class="btn btn-danger m-2"
+        >Delete</a
+      >
     </div>
   </div>
   <div class="col-2 d-flex">

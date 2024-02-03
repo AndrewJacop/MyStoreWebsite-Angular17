@@ -1,4 +1,8 @@
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
+<nav
+  class="navbar navbar-expand-lg bg-dark"
+  data-bs-theme="dark"
+  style="background-color: #3d4d5d"
+>
   <div class="container-fluid">
     <a class="navbar-brand" href="#">STORE HOME</a>
     <button
@@ -41,14 +45,21 @@
       </ul>
       <div class="d-flex">
         <button
-          class="btn btn-outline-success m-1"
+          class="btn btn-warning m-1"
+          (click)="navToDash()"
+          [hidden]="!isLoggedIn"
+        >
+          Add new product
+        </button>
+        <button
+          class="btn btn-success m-1"
           (click)="navToLogin()"
           [hidden]="isLoggedIn"
         >
           Log In
         </button>
         <button
-          class="btn btn-outline-danger m-1"
+          class="btn btn-danger m-1"
           (click)="openLogOutDialog()"
           [hidden]="!isLoggedIn"
         >

@@ -1,0 +1,67 @@
+<form (ngSubmit)="onSubmit()" #form="ngForm" class="my-3">
+  <div class="mb-3">
+    <label for="title" class="form-label">Name</label>
+    <input
+      type="text"
+      class="form-control"
+      [(ngModel)]="prd.title"
+      name="name"
+      #name="ngModel"
+    />
+  </div>
+  <div class="mb-3">
+    <label for="price" class="form-label">Price</label>
+    <input
+      class="form-control"
+      type="number"
+      [(ngModel)]="prd.price"
+      name="price"
+      #price="ngModel"
+    />
+  </div>
+  <div class="mb-3">
+    <label for="price" class="form-label">Quantity</label>
+    <input
+      class="form-control"
+      type="quantity"
+      [(ngModel)]="prd.quantity"
+      name="quantity"
+      #quantity="ngModel"
+    />
+  </div>
+  <div class="mb-3">
+    <label for="image" class="form-label">Image</label>
+    <input
+      type="file"
+      class="form-control"
+      [(ngModel)]="prd.image"
+      name="image"
+      #image="ngModel"
+    />
+  </div>
+  <div class="mb-3">
+    <label for="catId" class="form-label">Choose Category:</label>
+    <select
+      class="form-select"
+      [(ngModel)]="prd.catId"
+      name="catId"
+      #catId="ngModel"
+    >
+      @for (cat of catList; track $index) {
+      <option value="{{ cat.id }}">{{ cat.name }}</option>
+      }
+    </select>
+  </div>
+  <div class="mb-3">
+    <label for="disc" class="form-label">Discription</label>
+    <textarea
+      class="form-control"
+      [(ngModel)]="prd.description"
+      name="disc"
+      #disc="ngModel"
+      rows="3"
+    ></textarea>
+  </div>
+
+  <button type="submit" class="btn btn-warning">Submit</button>
+</form>

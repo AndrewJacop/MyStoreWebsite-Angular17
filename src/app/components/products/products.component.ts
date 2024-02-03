@@ -8,6 +8,7 @@ import { MyCCardDirective } from '../../directives/my-c-card.directive';
 import { MatCardModule } from '@angular/material/card';
 import { ICartItem } from '../../models/ICartItem';
 import { Router } from '@angular/router';
+import { ICategory } from '../../models/ICategory';
 
 @Component({
   selector: 'app-products',
@@ -24,9 +25,10 @@ import { Router } from '@angular/router';
 })
 export class ProductsComponent implements OnInit {
   title = 'Product List';
-  prdList: IProduct[] = [];
-  fPrdList: IProduct[] = [];
-  cartList: ICartItem[] = [];
+  prdList: IProduct[] = [] as IProduct[];
+  fPrdList: IProduct[] = [] as IProduct[];
+  cartList: ICartItem[] = [] as ICartItem[];
+  catList: ICategory[] = [] as ICategory[];
   total: number = 0;
   @Input() selectedCatId: number = 0;
   @Output() onUpdateCart: EventEmitter<{ c: ICartItem[]; t: number }> =
@@ -35,7 +37,11 @@ export class ProductsComponent implements OnInit {
   constructor(
     private productsService: GetProductsService,
     private router: Router
-  ) {}
+  ) {
+    this.productsService.getAllCategories().subscribe((data) => {
+      this.catList = data;
+    });
+  }
 
   buy(id: number) {
     // Reduce Quantity
@@ -69,13 +75,9 @@ export class ProductsComponent implements OnInit {
   updateLists(): void {
     this.productsService.getProducts().subscribe((data) => {
       this.prdList = data;
-      this.prdList.forEach((product) => {
-        product['quantity'] = Math.floor(Math.random() * 10);
-        product['available'] = product['quantity'];
-      });
       this.fPrdList = this.prdList;
       // console.log(this.fPrdList);
-      this.productsService.fullProductList = this.prdList;
+      // this.productsService.fullProductList = this.prdList;
     });
   }
 
@@ -100,9 +102,11 @@ export class ProductsComponent implements OnInit {
     if (this.selectedCatId == 0) {
       this.fPrdList = this.prdList;
     } else {
-      this.fPrdList = this.productsService.getProductsByCatId(
-        this.selectedCatId
-      );
+      this.productsService
+        .getProductsByCatId(this.selectedCatId)
+        .subscribe((data) => {
+          this.fPrdList = data;
+        });
       // console.log(this.prdList);
     }
   }

@@ -25,17 +25,20 @@ import { GetProductsService } from '../../services/getProducts.service';
   templateUrl: './order.component.html',
   styleUrls: ['./order.component.css'],
 })
-export class OrderComponent {
-  cartList: ICartItem[] = [];
-  catList: ICategory[] = [];
+export class OrderComponent implements OnInit {
+  cartList: ICartItem[] = [] as ICartItem[];
+  catList: ICategory[] = [] as ICategory[];
   catFilterId: number = 0;
   creditCardNumber: string = '';
   NationalIdNumber: string = '';
   @ViewChild(ProductsComponent) prdCm!: ProductsComponent;
   total: number = 0;
 
-  constructor(private productsService: GetProductsService) {
-    this.catList = productsService.catList;
+  constructor(private productsService: GetProductsService) {}
+  ngOnInit(): void {
+    this.productsService.getAllCategories().subscribe((data) => {
+      this.catList = data;
+    });
   }
 
   updateCart(cObj: { c: ICartItem[]; t: number }) {

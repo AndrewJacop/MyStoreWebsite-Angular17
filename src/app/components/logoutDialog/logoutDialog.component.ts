@@ -7,11 +7,18 @@ import {
   MatDialogRef,
   MatDialogTitle,
 } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-logoutDialog',
   standalone: true,
-  imports: [MatDialogActions, MatDialogClose, MatDialogTitle, MatDialogContent],
+  imports: [
+    MatDialogActions,
+    MatDialogClose,
+    MatDialogTitle,
+    MatDialogContent,
+    MatButtonModule,
+  ],
   templateUrl: './logoutDialog.component.html',
   styleUrls: ['./logoutDialog.component.css'],
 })

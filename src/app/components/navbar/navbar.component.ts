@@ -35,6 +35,9 @@ export class NavbarComponent implements OnInit {
   navToLogin() {
     this.router.navigate(['/home/login']);
   }
+  navToDash() {
+    this.router.navigate(['/home/add']);
+  }
 
   openLogOutDialog(): void {
     this.dialog.open(LogoutDialogComponent, {
