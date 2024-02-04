@@ -9,6 +9,7 @@ import { LoginComponent } from './components/login/login.component';
 import { orderAuthGuard } from './guards/orderAuth.guard';
 import { WelcomeComponent } from './components/welcome/welcome.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { RegisterFormComponent } from './components/register-form/register-form.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/home/welcome', pathMatch: 'full' },
@@ -23,6 +24,7 @@ export const routes: Routes = [
         canActivate: [orderAuthGuard],
       },
       { path: 'about', component: AboutUsComponent },
+      { path: 'register', component: RegisterFormComponent },
       { path: 'contact', component: ContactUsComponent },
       { path: 'login', component: LoginComponent },
       { path: 'add', component: DashboardComponent },
