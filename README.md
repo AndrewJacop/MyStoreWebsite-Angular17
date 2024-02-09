@@ -1,6 +1,6 @@
-# Day3
+# My Store Website
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.1.0.
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.1.0. as a proof of concept and to test out some of the new features provided in the new verison of Angular
 
 ## Development server
 
