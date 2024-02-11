@@ -1,14 +1,90 @@
-<div class="example-container">
-  <mat-form-field>
+<form
+  class="container my-3"
+  [formGroup]="userRegForm"
+  (ngSubmit)="submitForm()"
+>
+  <mat-form-field class="col-8 px-2">
+    <mat-label>Enter your Full Name</mat-label>
+    <input matInput type="text" placeholder="John Doe" [formControl]="name" />
+    @if (name.invalid) {
+    <mat-error>{{ getNameErrorMessage() }}</mat-error>
+    }
+  </mat-form-field>
+  <mat-form-field class="col-8 px-2">
     <mat-label>Enter your email</mat-label>
     <input
       matInput
-      placeholder="pat@example.com"
+      type="email"
+      placeholder="andrew@example.com"
       [formControl]="email"
-      required
     />
     @if (email.invalid) {
-    <mat-error>{{ getErrorMessage() }}</mat-error>
+    <mat-error>{{ getEmailErrorMessage() }}</mat-error>
     }
   </mat-form-field>
-</div>
+  <mat-form-field class="col-8 px-2">
+    <mat-label>Choose a password</mat-label>
+    <input matInput type="password" [formControl]="password" />
+    @if (password.invalid) {
+    <mat-error>{{ getPassErrorMessage() }}</mat-error>
+    }
+  </mat-form-field>
+  <label class="col-12 mx-3"><h3>Address</h3></label>
+  <form class="col-8" [formGroup]="address">
+    <mat-form-field class="col-6 px-2">
+      <mat-label>street</mat-label>
+      <input matInput type="text" formControlName="street" />
+    </mat-form-field>
+    <mat-form-field class="col-6 px-2">
+      <mat-label>city</mat-label>
+      <input matInput type="text" formControlName="city" />
+    </mat-form-field>
+    <mat-form-field class="col-6 px-2">
+      <mat-label>state</mat-label>
+      <input matInput type="text" formControlName="state" />
+    </mat-form-field>
+    <mat-form-field class="col-6 px-2">
+      <mat-label>zip code</mat-label>
+      <input matInput type="text" formControlName="zip" />
+      @if (zip?.invalid) {
+      <mat-error>Zip code must be 5 numbers!</mat-error>
+      }
+    </mat-form-field>
+  </form>
+  <ng-container class="row" formArrayName="phones">
+    <label class="col-12 mx-3"><h3>Phone Number(s)</h3></label>
+    @for (phone of phones.controls; track $index) {
+    <mat-form-field class="col-8 px-2">
+      <mat-label>Enter a phone number</mat-label>
+      <input matInput type="text" [formControlName]="$index" />
+    </mat-form-field>
+    @if ($index != 0) {
+    <button
+      mat-mini-fab
+      color="warn"
+      aria-label="remove phone"
+      (click)="removePhone($index)"
+    >
+      <mat-icon>remove</mat-icon>
+    </button>
+    } }
+    <button
+      class="d-block row justify-content-between col-8"
+      mat-button
+      color="primary"
+      type="button"
+      (click)="addPhone()"
+    >
+      Add another phone
+    </button>
+    <button
+      class="d-block row justify-content-between col-8"
+      mat-raised-button
+      color="primary"
+      type="submit"
+      [disabled]="!userRegForm.valid"
+    >
+      Submit
+    </button>
+  </ng-container>
+</form>
